@@ -1,1 +1,0 @@
-const t=JSON.parse('{"key":"v-33d32901","path":"/v5/config/proxy.html","title":"Proxy 代理协议","lang":"zh-CN","frontmatter":{},"excerpt":"","headers":[],"git":{"updatedTime":1651450688000,"contributors":[{"name":"秋のかえで","email":"autmaple@protonmail.com","commits":3}]},"filePathRelative":"v5/config/proxy.md"}');export{t as data};

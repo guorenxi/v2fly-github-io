@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-e622a286","path":"/v5/config/service/backgroundObservatory.html","title":"后台连接观测","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"updatedTime":1634985204000,"contributors":[{"name":"秋のかえで","email":"autmaple@protonmail.com","commits":1}]},"filePathRelative":"v5/config/service/backgroundObservatory.md"}');export{e as data};

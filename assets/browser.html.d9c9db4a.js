@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-5f83dbbe","path":"/v5/config/service/browser.html","title":"浏览器转发模块","lang":"zh-CN","frontmatter":{},"excerpt":"","headers":[],"git":{"updatedTime":1634985173000,"contributors":[{"name":"秋のかえで","email":"autmaple@protonmail.com","commits":1}]},"filePathRelative":"v5/config/service/browser.md"}');export{e as data};
