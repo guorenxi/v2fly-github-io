@@ -4,17 +4,50 @@
 Trojan 被设计工作在正确配置的加密 TLS 隧道中。
 :::
 
-## Trojan 入站
+## Trojan 入站 (简化版)
 
-inbound.trojan
+* 协议名称: `trojan`
+
+### 结构
+
+```json
+{
+  "users": [],
+  "packetEncoding": "None"
+}
+```
+
+### 字段
 
 > `users` : [string]
 
 一组服务器认可用户的密码。
 
-## Trojan 出站
+> `packetEncoding`: \["None" | "Packet" | "Stream"\]
 
-outbound.trojan
+UDP 包编码方式，默认值为 `None`。(v5.4.0+)
+
+当值为 `None` 时，UDP 流量会按目标地址和端口分别映射（Address and Port-Dependent Mapping）。
+
+当值为 `Packet` 时，每个 UDP 包会与其目标地址一起编码，同时保留数据包边界。兼容的出站可将其还原为端点独立映射（Endpoint Independent Mapping）的 UDP 连接；这种 UDP 行为也称为 Full Cone 或 NAT1。
+
+当值为 `Stream` 时，每个 UDP 包及其目标地址会通过长度前缀在字节流中分帧。兼容的出站可将其还原为端点独立映射（Endpoint Independent Mapping）的 UDP 连接；这种 UDP 行为也称为 Full Cone 或 NAT1。这使 UDP 连接可以通过不支持基于数据包通信的代理协议传输。（v5.53.0+）
+
+## Trojan 出站 (简化版)
+
+* 协议名称: `trojan`
+
+### 结构
+
+```json
+{
+  "address": "",
+  "port": 0,
+  "password": ""
+}
+```
+
+### 字段
 
 > `address`: string
 
@@ -27,3 +60,80 @@ outbound.trojan
 > `password`: string
 
 服务器认可的 Trojan 用户的密码。
+
+## Trojan 入站 (完整版)
+
+* 协议名称: `#v2ray.core.proxy.trojan.ServerConfig`
+
+### 结构
+
+```json
+{
+  "users": [],
+  "packetEncoding": "None",
+  "fallbacks": []
+}
+```
+
+### 字段
+
+> `users`: [[UserObject](../protocol/user.md#userobject)]
+
+> `packetEncoding`: \["None" | "Packet" | "Stream"\]
+
+取值及默认值与上述简化版配置中的 `packetEncoding` 相同。
+
+> `fallbacks`: [[FallbackObject](#fallbackobject)]
+
+## Trojan 出站 (完整版)
+
+* 协议名称: `#v2ray.core.proxy.trojan.ClientConfig`
+
+> `server`: [[ServerEndpointObject](../protocol/server_spec.md#serverendpointobject)]
+
+## AccountObject
+
+### 结构
+
+```json
+{
+  "@type": "v2ray.core.proxy.trojan.Account",
+  "password": ""
+}
+```
+
+### 字段
+
+> `@type`: "v2ray.core.proxy.trojan.Account"
+
+> `password`: string
+
+## FallbackObject
+
+### 结构
+
+```json
+{
+  "alpn": "",
+  "path": "",
+  "type": "",
+  "dest": "",
+  "xver": 0
+}
+```
+
+### 字段
+
+> `alpn`: string
+
+> `path`: string
+
+> `type`: string
+
+网络协议. "tcp", "tcp4" (仅IPv4), "tcp6" (仅IPv6).
+
+> `dest`: string
+
+目标地址, 格式为 "host:port", ex: "127.0.0.1:80" .
+
+> `xver`: uint64

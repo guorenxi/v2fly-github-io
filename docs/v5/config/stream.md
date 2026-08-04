@@ -23,15 +23,19 @@
 
 > `securitySettings`: settings of `<security>`
 
-> `socketSettings`: [SocketConfigObject](#SocketConfigObject)
+> `socketSettings`: [SocketConfigObject](#socketconfigobject)
 
 ## 支持的传输流协议
 
-* [mKCP](stream/kcp.md)
 * [TCP](stream/tcp.md)
 * [WebSocket](stream/websocket.md)
+* [mKCP](stream/kcp.md)
 * [gRPC](stream/grpc.md)
 * [QUIC](stream/quic.md)
+* [meek](stream/meek.md)
+* [Google Docs Viewer](stream/gdocsviewer.md)
+* [httpupgrade](stream/httpupgrade.md)
+* [Hysteria2](stream/hy2.md)
 
 
 ## TLS
@@ -53,9 +57,31 @@ security.tls
 
 使用 Base64 标准编码格式表示的远程服务器的证书链的SHA256散列值。在设置后，远程服务器的证书链的散列值必须为列表中的数值之一。
 
+此数值可以通过以下命令生成： `./v2ray tls certChainHash --cert <cert.pem>` (v5.18.0+)
+
 在连接因为此策略失败时，会展示此证书链散列。不建议使用这种方式获得证书链散列值，因为在这种情况下您没有机会验证此时服务器提供的证书是否为真实证书。
 
-> `certificate`: [CertificateObject](#CertificateObject)
+> `allowInsecureIfPinnedPeerCertificate` : bool
+
+此选项将在 `pinnedPeerCertificateChainSha256` 被设置时禁用 TLS 证书验证。如果 `pinnedPeerCertificateChainSha256` 没有被设置，本选项会被忽略。
+
+> `certificate`: \[[CertificateObject](#certificateobject)\]
+
+> `echConfig` : string
+
+配置对应serverName域名的ech config。
+
+如果ech config不是固定的，则此选项不是特别有用，建议改用下方的echDOHserver选项。
+
+示例："securitySettings": { "echConfig": "AFj+DQBUAAAgACAJSBrX4ZNnpgYFsaF+sUabAbsO+y2Bs61D6nmHEw7dRgAkAAEAAQABAAIAAQADAAIAAQACAAIAAgADAAMAAQADAAIAAwADAAV4LmNvbQAA" }
+
+> `echDOHserver` : string
+
+如果未设置`echConfig`，则使用此服务器查询对应serverName域名的ech config。
+
+如果设置了`echConfig`，此选项没有效果。
+
+示例："securitySettings": { "echDOHserver": "https://1.1.1.1/dns-query" }
 
 
 ### CertificateObject
@@ -105,7 +131,7 @@ uTLS 是一个修改版本的 TLS 实现。 这个项目通过模仿常用 TLS �
 
 当您在部分传输方式中使用 uTLS 时，应用层协议协商的内容将被覆盖以便使该传输方式可以正常运作。这会导致客户端握手包的指纹和被模仿的指纹有些许不同。
 
-> `tlsConfig`: [TLSConfig](#TLS)
+> `tlsConfig`: [TLSConfig](#tls)
 
 嵌入的 TLS 设置，只有部分内容会被应用到 uTLS.
 
@@ -157,7 +183,6 @@ uTLS 是一个修改版本的 TLS 实现。 这个项目通过模仿常用 TLS �
 > `noSNI`: bool
 
 不发送服务器名称指示。可能会导致连接异常。
-## SocketConfigObject
 
 > `forceAlpn` : "TRANSPORT_PREFERENCE_TAKE_PRIORITY" | "NO_ALPN" | "UTLS_PRESET"
 
@@ -167,12 +192,17 @@ uTLS 是一个修改版本的 TLS 实现。 这个项目通过模仿常用 TLS �
 - `NO_ALPN` : 不发送 ALPN TLS 扩展
 - `UTLS_PRESET`: 以 uTLS 的特征模板中的 ALPN 设置为准。
 
+## SocketConfigObject
+
 ```json
 {
     "mark": 0,
     "tcpFastOpen": false,
+    "tcpFastOpenQueueLength": 4096,
     "tproxy": "off",
-    "tcpKeepAliveInterval": 0
+    "tcpKeepAliveInterval": 0,
+    "bindToDevice": "eth0",
+    "mptcp": false
 }
 ```
 
@@ -218,4 +248,13 @@ TCP 保持活跃的数据包的发送间隔，以秒为单位（仅适用于 Lin
 
 > `bindToDevice`: string
 
-将连接绑定到指定的网络设备（仅适用于 Linux）。
+将连接绑定到指定的网络设备（Linux: v5.0.6+, Windows/Darwin: v5.2.0+）。
+
+> `mptcp`: true | false
+
+是否启用多路径TCP（仅适用于Linux）。
+
+* `true`: 打开 MPTCP 。如果另一端的主机不支持 MPTCP，MPTCP 将回退为普通 TCP。
+* `false`: 关闭 MPTCP 。
+
+当此项不存在时，将使用系统默认设置。可用于入站和出站连接。

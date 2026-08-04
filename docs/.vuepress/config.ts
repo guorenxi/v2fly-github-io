@@ -1,8 +1,9 @@
-import {defineUserConfig} from 'vuepress'
-import {defaultTheme} from '@vuepress/theme-default'
-import {docsearchPlugin} from '@vuepress/plugin-docsearch'
-import {registerComponentsPlugin} from '@vuepress/plugin-register-components'
+import { defineUserConfig } from 'vuepress'
+import { defaultTheme } from '@vuepress/theme-default'
+import { docsearchPlugin } from '@vuepress/plugin-docsearch'
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
 import { getDirname, path } from '@vuepress/utils'
+import { viteBundler } from '@vuepress/bundler-vite'
 
 const __dirname = getDirname(import.meta.url)
 
@@ -41,11 +42,16 @@ export default defineUserConfig({
             description: 'Project V is a collection of tools that can help you build your own basic communication network',
         }
     },
+    bundler: viteBundler({
+        viteOptions: {},
+        vuePluginOptions: {},
+    }),
     theme: defaultTheme({
         repo: 'v2fly',
         docsRepo: 'v2fly/v2fly-github-io',
         logo: '/v2ray.png',
         docsDir: 'docs',
+        docsBranch: 'master',
         locales: {
             '/': {
                 selectLanguageText: 'Languages',
@@ -56,7 +62,8 @@ export default defineUserConfig({
                 contributorsText: '贡献者',
                 navbar: [
                     { text: '快速开始', link: '/guide/start', },
-                    { text: '配置文档', link: '/v5/config/overview', },
+                    { text: '配置文档', link: '/config/overview', },
+                    { text: '配置文档 (v5, WIP)', link: '/v5/config/overview', },
                     { text: '工具列表', link: '/awesome/tools' },
                     { text: '开发手册', link: '/developer/intro/compile', },
                     { text: '新白话文指南', link: 'https://guide.v2fly.org/' },
@@ -120,6 +127,7 @@ export default defineUserConfig({
                                 '/config/protocols/trojan',
                                 '/config/protocols/vless',
                                 '/config/protocols/loopback',
+                                '/config/protocols/hy2',
                             ],
                         },
                         {
@@ -132,8 +140,21 @@ export default defineUserConfig({
                                 '/config/transport/quic',
                                 '/config/transport/domainsocket',
                                 '/config/transport/grpc',
+                                '/config/transport/hy2',
                             ],
                         },
+                        {
+                            text: '服务',
+                            children: [
+                                '/config/service/stats',
+                                '/config/service/policy',
+                                '/config/service/browser',
+                                '/config/service/burstObservatory',
+                                '/config/service/backgroundObservatory',
+                                '/config/service/tun',
+                                '/config/service/subscription',
+                            ],
+                        }
                     ],
                     '/developer/': [
                         {
@@ -142,6 +163,8 @@ export default defineUserConfig({
                                 '/developer/intro/compile',
                                 '/developer/intro/design',
                                 '/developer/intro/guide',
+                                '/developer/intro/releasearchive',
+                                '/developer/intro/releasesigning',
                             ]
                         },
                         {
@@ -180,7 +203,9 @@ export default defineUserConfig({
                                 '/v5/config/proxy/vmess',
                                 '/v5/config/proxy/vlite',
                                 '/v5/config/proxy/shadowsocks',
+                                '/v5/config/proxy/shadowsocks2022',
                                 '/v5/config/proxy/trojan',
+                                '/v5/config/proxy/hy2',
                                 '/v5/config/proxy/vless',
                                 '/v5/config/proxy/loopback',
                             ],
@@ -193,6 +218,12 @@ export default defineUserConfig({
                                 '/v5/config/stream/kcp',
                                 '/v5/config/stream/grpc',
                                 '/v5/config/stream/quic',
+                                '/v5/config/stream/meek',
+                                '/v5/config/stream/gdocsviewer',
+                                '/v5/config/stream/httpupgrade',
+                                '/v5/config/stream/hy2',
+                                '/v5/config/stream/mekya',
+                                '/v5/config/stream/tlsmirror',
                             ],
                         },
                         {
@@ -203,6 +234,9 @@ export default defineUserConfig({
                                 '/v5/config/service/browser',
                                 '/v5/config/service/burstObservatory',
                                 '/v5/config/service/backgroundObservatory',
+                                '/v5/config/service/tun',
+                                '/v5/config/service/subscription',
+                                '/v5/config/service/filesystemstorage',
                             ],
                         }
                     ],
@@ -210,14 +244,16 @@ export default defineUserConfig({
                 },
             },
             '/en_US/': {
-                selectLanguageName: 'English',
                 selectLanguageText: '选择语言',
+                selectLanguageName: 'English',
                 selectLanguageAriaLabel: '选择语言',
                 editLinkText: 'Edit this page on GitHub',
                 lastUpdatedText: 'Last Updated',
+                contributorsText: 'Contributors',
                 navbar: [
                     { text: 'Quick Start', link: '/en_US/guide/start', },
-                    { text: 'Config Reference', link: '/en_US/v5/config/overview', },
+                    { text: 'Config Reference', link: '/en_US/config/overview', },
+                    { text: 'Config Reference (v5, WIP)', link: '/en_US/v5/config/overview', },
                     { text: 'Tools', link: '/en_US/awesome/tools' },
                     { text: 'Developer Guide', link: '/en_US/developer/intro/compile', },
                     { text: 'New concise guide', link: 'https://guide.v2fly.org/' },
@@ -235,12 +271,14 @@ export default defineUserConfig({
                             text: 'Concept',
                             children: [
                                 'workflow',
+                                'command',
                             ],
                         },
                         {
                             text: 'More',
                             children: [
                                 'faq',
+                                'help',
                             ],
                         },
                     ],
@@ -249,8 +287,20 @@ export default defineUserConfig({
                             text: 'Config Reference',
                             children: [
                                 '/en_US/config/overview',
+                                '/en_US/config/env',
                                 '/en_US/config/dns',
+                                '/en_US/config/routing',
+                                '/en_US/config/policy',
+                                '/en_US/config/inbounds',
                                 '/en_US/config/outbounds',
+                                '/en_US/config/transport',
+                                '/en_US/config/api',
+                                '/en_US/config/stats',
+                                '/en_US/config/reverse',
+                                '/en_US/config/multiple_config',
+                                '/en_US/config/fakedns',
+                                '/en_US/config/browserforwarder',
+                                '/en_US/config/observatory',
                             ],
                         },
                         {
@@ -260,14 +310,41 @@ export default defineUserConfig({
                                 '/en_US/config/protocols/dns',
                                 '/en_US/config/protocols/dokodemo',
                                 '/en_US/config/protocols/freedom',
+                                '/en_US/config/protocols/http',
+                                '/en_US/config/protocols/socks',
+                                '/en_US/config/protocols/vmess',
+                                '/en_US/config/protocols/shadowsocks',
+                                '/en_US/config/protocols/trojan',
+                                '/en_US/config/protocols/vless',
+                                '/en_US/config/protocols/loopback',
+                                '/en_US/config/protocols/hy2',
                             ],
                         },
                         {
                             text: 'Transport',
-                            
                             children: [
+                                '/en_US/config/transport/tcp',
+                                '/en_US/config/transport/mkcp',
+                                '/en_US/config/transport/websocket',
+                                '/en_US/config/transport/h2',
+                                '/en_US/config/transport/quic',
+                                '/en_US/config/transport/domainsocket',
+                                '/en_US/config/transport/grpc',
+                                '/en_US/config/transport/hy2',
                             ],
                         },
+                        {
+                            text: 'Service',
+                            children: [
+                                '/en_US/config/service/stats',
+                                '/en_US/config/service/policy',
+                                '/en_US/config/service/browser',
+                                '/en_US/config/service/burstObservatory',
+                                '/en_US/config/service/backgroundObservatory',
+                                '/en_US/config/service/tun',
+                                '/en_US/config/service/subscription',
+                            ],
+                        }
                     ],
                     '/en_US/developer/': [
                         {
@@ -276,11 +353,16 @@ export default defineUserConfig({
                                 '/en_US/developer/intro/compile',
                                 '/en_US/developer/intro/design',
                                 '/en_US/developer/intro/guide',
+                                '/en_US/developer/intro/releasearchive',
+                                '/en_US/developer/intro/releasesigning',
                             ]
                         },
                         {
                             text: 'Protocol Details',
                             children: [
+                                '/en_US/developer/protocols/vmess',
+                                '/en_US/developer/protocols/mkcp',
+                                '/en_US/developer/protocols/muxcool',
                             ]
                         }
                     ],
@@ -302,18 +384,21 @@ export default defineUserConfig({
                         {
                             text: 'Proxy Protocol',
                             children: [
+                                '/en_US/v5/config/proxy/blackhole',
+                                '/en_US/v5/config/proxy/dns',
+                                '/en_US/v5/config/proxy/dokodemo',
+                                '/en_US/v5/config/proxy/freedom',
+                                '/en_US/v5/config/proxy/http',
                                 '/en_US/v5/config/proxy/socks',
                                 '/en_US/v5/config/proxy/vmess',
                                 '/en_US/v5/config/proxy/vlite',
                                 '/en_US/v5/config/proxy/shadowsocks',
-                                '/en_US/v5/config/proxy/http',
-                                '/en_US/v5/config/proxy/dokodemo',
-                                '/en_US/v5/config/proxy/freedom',
-                                '/en_US/v5/config/proxy/loopback',
-                                '/en_US/v5/config/proxy/blackhole',
-                                '/en_US/v5/config/proxy/dns',
+                                '/en_US/v5/config/proxy/shadowsocks2022',
                                 '/en_US/v5/config/proxy/trojan',
+                                '/en_US/v5/config/proxy/hy2',
                                 '/en_US/v5/config/proxy/vless',
+                                '/en_US/v5/config/proxy/loopback',
+                                '/en_US/v5/config/proxy/wireguard',
                             ],
                         },
                         {
@@ -322,7 +407,14 @@ export default defineUserConfig({
                                 '/en_US/v5/config/stream/tcp',
                                 '/en_US/v5/config/stream/websocket',
                                 '/en_US/v5/config/stream/kcp',
+                                '/en_US/v5/config/stream/grpc',
                                 '/en_US/v5/config/stream/quic',
+                                '/en_US/v5/config/stream/meek',
+                                '/en_US/v5/config/stream/gdocsviewer',
+                                '/en_US/v5/config/stream/httpupgrade',
+                                '/en_US/v5/config/stream/hy2',
+                                '/en_US/v5/config/stream/mekya',
+                                '/en_US/v5/config/stream/tlsmirror',
                             ],
                         },
                         {
@@ -333,6 +425,9 @@ export default defineUserConfig({
                                 '/en_US/v5/config/service/browser',
                                 '/en_US/v5/config/service/burstObservatory',
                                 '/en_US/v5/config/service/backgroundObservatory',
+                                '/en_US/v5/config/service/tun',
+                                '/en_US/v5/config/service/subscription',
+                                '/en_US/v5/config/service/filesystemstorage',
                             ],
                         }
                     ],

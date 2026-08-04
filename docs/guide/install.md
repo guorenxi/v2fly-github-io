@@ -31,7 +31,8 @@ V2Ray 提供两种验证方式：
 ## macOS 安装方式
 
 * 在 [Github Releases](https://github.com/v2fly/v2ray-core/releases) 下载适用于 macOS 平台的 ZIP 压缩包，解压后可得到可执行文件 `v2ray`，然后[通过命令行带参数运行](command.md)即可
-* 通过 [Homebrew](https://brew.sh) 包管理器安装：`brew install v2ray`，随命令一起下载的 geosite.dat 和 geoip.dat 放置在 `/usr/local/share/v2ray/` 目录下
+* 通过 [Homebrew](https://brew.sh) 包管理器安装：`brew install v2ray`
+* 随命令一起下载的 geosite.dat 和 geoip.dat 放置在 `/usr/local/share/v2ray/` 目录下，若是 Apple Silicon 版本则默认放置在 `/opt/homebrew/share/v2ray`
 
 ## Linux 安装方式
 
@@ -109,13 +110,14 @@ LogsDirectory=v2ray
 
 ## Docker 安装方式
 
-* V2Ray 为 Linux 平台提供了预编译的 Docker image：[v2fly/v2fly-core](https://hub.docker.com/r/v2fly/v2fly-core)
-* GitHub 仓库：[github.com/v2fly/docker](https://github.com/v2fly/docker)
+
+
+* V2Ray 为 Linux 平台提供了预编译的 Docker image：[ghcr.io/v2fly/v2ray:latest-extra](https://github.com/v2fly/v2ray-core/pkgs/container/v2ray)。其中的 "latest-extra" 标签会自动更新至最新发布版本。其他版本将使用版本号作为标签发布，例如 "4.27.0"。
 
 Docker image 的文件结构：
+* `/opt/v2ray/etc/config.json`: 配置文件
+* `/opt/v2ray/bin/v2ray`: V2Ray 主程序
+* `/opt/v2ray/share/geoip.dat`: GeoIP 数据文件
+* `/opt/v2ray/share/geosite.dat`: GeoSite 数据文件
 
-* `/etc/v2ray/config.json`：配置文件
-* `/usr/bin/v2ray`：V2Ray 主程序
-* `/usr/bin/v2ctl`：V2Ray 辅助工具
-* `/usr/local/share/v2ray/geoip.dat`：IP 数据文件
-* `/usr/local/share/v2ray/geosite.dat`：域名数据文件
+[v2fly/v2fly-core](https://hub.docker.com/r/v2fly/v2fly-core)：此 Docker Hub 镜像是在[v2fly/docker](https://github.com/v2fly/docker)中手动构建的，可能存在更新滞后的情况，因此不再推荐使用。

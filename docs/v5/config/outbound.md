@@ -38,13 +38,23 @@ outbound
 
 底层传输配置。
 
-> `proxySettings`: [ProxyObject](#ProxyObject)
+> `proxySettings`: [ProxyObject](#proxyobject)
 
 出站代理配置。当出站代理生效时。
 
-> `mux`: [MuxObject](#MuxObject)
+> `mux`: [MuxObject](#muxobject)
 
 Mux 配置。
+
+
+> `domainStrategy`: [ "AsIs" | "UseIP" | "UseIP4" | "UseIP6" | "" ]
+
+控制如何如何处理传出连接中的域名. (v5.12.0+)
+
+- "AsIs" : 让操作系统来解析。
+- "UseIP" : 使用内置 dns 解析它，并使用结果中的任意 IP 地址。
+- "UseIP4" : 使用内置 dns 解析它，并使用结果中的任意 IPv4 地址。
+- "UseIP6" : 使用内置 dns 解析它，并使用结果中的任意 IPv6 地址。
 
 ## 支持的代理协议
 
@@ -52,6 +62,7 @@ Mux 配置。
 * [VMess](proxy/vmess.md)
 * [VLite](proxy/vlite.md)
 * [Shadowsocks](proxy/shadowsocks.md)
+* [Shadowsocks2022](proxy/shadowsocks2022.md)
 * [Freedom](proxy/freedom.md)
 * [Loopback](proxy/loopback.md)
 * [Blackhole](proxy/blackhole.md)

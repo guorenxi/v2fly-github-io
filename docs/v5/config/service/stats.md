@@ -20,7 +20,7 @@ V2Ray 提供了一些关于其运行状况的统计信息。
 
 特定用户的上行流量，单位为字节。
 
-> `user>>>[email]>>>traffic>>>downlink` 
+> `user>>>[email]>>>traffic>>>downlink`
 
 特定用户的下行流量，单位为字节。
 

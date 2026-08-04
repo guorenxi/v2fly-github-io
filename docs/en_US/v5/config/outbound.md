@@ -35,13 +35,22 @@ The Tag of the outbound. This is used as an identifier for outbounds.
 
 The stream settings for the outbound. This determine how the protocol data is transferred.
 
-> `proxySettings`: [ProxyObject](#ProxyObject)
+> `proxySettings`: [ProxyObject](#proxyobject)
 
 Forward Proxy(Proxy Chaining) settings.
 
-> `mux`: [MuxObject](#MuxObject)
+> `mux`: [MuxObject](#muxobject)
 
 Connection multiplexor settings.
+
+> `domainStrategy`: [ "AsIs" | "UseIP" | "UseIP4" | "UseIP6" | "" ]
+
+Control whether how domain names in outgoing connection are processed. (v5.12.0+)
+
+- "AsIs" : Let operating system resolve it.
+- "UseIP" : Resolve it with built-in dns, and use any IP address.
+- "UseIP4" : Resolve it with built-in dns, and use any IPv4 address.
+- "UseIP6" : Resolve it with built-in dns, and use any IPv6 address.
 
 ## Supported Proxy Protocol
 
@@ -49,6 +58,7 @@ Connection multiplexor settings.
 * [VMess](proxy/vmess.md)
 * [VLite](proxy/vlite.md)
 * [Shadowsocks](proxy/shadowsocks.md)
+* [Shadowsocks2022](proxy/shadowsocks2022.md)
 * [Freedom](proxy/freedom.md)
 * [Loopback](proxy/loopback.md)
 * [Blackhole](proxy/blackhole.md)
@@ -56,3 +66,4 @@ Connection multiplexor settings.
 * [Trojan](proxy/trojan.md)
 * [HTTP](proxy/http.md)
 * [VLESS](proxy/vless.md)
+* [WireGuard](proxy/wireguard.md)

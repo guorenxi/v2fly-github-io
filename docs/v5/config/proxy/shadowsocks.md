@@ -18,11 +18,15 @@ inbound.shadowsocks
 
 可接收的网络连接类型，比如当指定为 `"tcp"` 时，Shadowsocks 入站仅会接收 TCP 流量。默认值为 `"tcp"`。
 
-> `packetEncoding`:  \["None" | "Packet"\]
+> `packetEncoding`: \["None" | "Packet" | "Stream"\]
 
 UDP 包编码方式，默认值为 `None`。
-当该值为 `None` 时，UDP 将根据目标地址被映射 (Address and Port-Dependent Mapping)。
-当该值为 `Packet` 时，UDP 将被端点独立映射 (Endpoint Independent Mapping)，此 UDP 行为也被称为 FullCone 或 NAT1。
+
+当值为 `None` 时，UDP 流量会按目标地址和端口分别映射（Address and Port-Dependent Mapping）。
+
+当值为 `Packet` 时，每个 UDP 包会与其目标地址一起编码，同时保留数据包边界。兼容的出站可将其还原为端点独立映射（Endpoint Independent Mapping）的 UDP 连接；这种 UDP 行为也称为 Full Cone 或 NAT1。
+
+当值为 `Stream` 时，每个 UDP 包及其目标地址会通过长度前缀在字节流中分帧。兼容的出站可将其还原为端点独立映射（Endpoint Independent Mapping）的 UDP 连接；这种 UDP 行为也称为 Full Cone 或 NAT1。这使 UDP 连接可以通过不支持基于数据包通信的代理协议传输。（v5.53.0+）
 
 ## Shadowsocks 出站
 
@@ -54,3 +58,38 @@ outbound.shadowsocks
 ::: warning
 "none" 不加密方式下，服务器端不会验证 "password" 中的密码。一般需要加上 TLS 并在传输层使用安全配置，例如 WebSocket 配置较长的 path
 :::
+Shadowsocks+aes-256-gcm配置示例，这是一个最简单的配置，不是最佳实践，这个配置可以用于回国，但是切勿用于翻墙！
+```json
+{
+    "log": {
+        "access": "",
+        "error": "",
+        "loglevel": "info"
+    },
+    "inbounds": [
+        {
+            "port": 443,
+            "listen": "0.0.0.0",
+            "protocol": "shadowsocks",
+            "settings": {
+                "method": "aes-256-gcm", //这里使用`aes-256-gcm`加密方式，如果你的CPU不带aes加密指令集也可以使用`"chacha20-poly1305"` 或 `"chacha20-ietf-poly1305"`
+                "password": "ukrxmqlkYTnyyb5sgc8mqiDe5vMoFqRwxefqiigxfdzgigLASE=", //更改这里的密码，让它变得更加复杂
+                "network": "tcp,udp"
+            },
+            "sniffing": {
+                "enabled": false,//如果需要流量探测，请将其改为`true`
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {}
+        }
+    ]
+}
+```

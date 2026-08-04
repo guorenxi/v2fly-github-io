@@ -1,4 +1,5 @@
 # Inbounds
+
 inbound
 
 ```json
@@ -36,11 +37,13 @@ v4.32.0+，支持填写 Unix domain socket，格式为绝对路径，形如 `"/d
 
 填写 Unix domain socket 时，`port` 将被忽略，协议暂时可选 VLESS、VMess、Trojan，传输方式可选 TCP、WebSocket、HTTP/2。
 
+对于常规（非 abstract）Unix domain socket，支持添加访问权限，格式为 `"/dev/shm/domain.socket,0666"`。即在路径后面加上逗号和八进制数（代表权限），权限的设定方式与类 Unix 系统的 `chmod` 命令相同。（v5.9.0+）
+
 > `tag`: string
 
 此入站连接的标识，用于在其它的配置中定位此连接。当其不为空时，其值必须在所有 `tag` 中唯一。
 
-> `sniffing`: [SniffingObject](#SniffingObject)
+> `sniffing`: [SniffingObject](#sniffingobject)
 
 入站连接的流量探测设置。流量探测允许路由根据连接的内容和元数据转发连接。
 
